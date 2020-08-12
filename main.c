@@ -262,11 +262,12 @@ static int zigbee_sdk_explore_status_cb(char *deviceEui, int status, int cluster
 static int zigbee_sdk_cmd_status_cb(char *deviceEui, int endpoint, int clusterId, int cmdId,
                                     int status, int linkQuality, void *context) {
   char deviceId[17] = { 0 };
+  int *seqNum = (int *)context;
 
   byte_stream_to_str(deviceEui, deviceId);
   printf("Resource : %s, endpointId: %d, clusterId: %d command: %d processed "
-         "with status: %d and linkQuality: %d\n", deviceId, endpoint, clusterId, cmdId,
-         status, linkQuality);
+         "with status: %d and linkQuality: %d having seqNum: %d\n", deviceId, endpoint, clusterId, cmdId,
+         status, linkQuality, *seqNum);
   return 0;
 }
 
@@ -330,9 +331,11 @@ Description : Inits the application and then falls into a dispatch loop
 *******************************************************************************/
 int main(int argc, char *argv[]) {
   zigbee_sdk_init(argc, argv);
-  int choice, epId, clusterId, attributeId;
+  int choice, epId, clusterId, attributeId, commandId, payloadLen, manuf;
   char *resourceEui = malloc(17 * sizeof(char));
+  char *payload = NULL, *cmdData = NULL;
   char deviceId[8] = { 0 };
+  int seqNUm = 1;
 
   do {
     printf("Select one of the below:\n");
@@ -340,6 +343,7 @@ int main(int argc, char *argv[]) {
     printf("1. Discover and Add resources\n");
     printf("2. Remove resource\n");
     printf("3. Read Attribute\n");
+    printf("4. Send Command \n");
     scanf("%d", &choice);
 
     switch(choice) {
@@ -373,6 +377,41 @@ int main(int argc, char *argv[]) {
         rbsdk_get_attr(deviceId, epId, clusterId, attributeId);
         break;
 
+      case 4:
+        seqNUm++;
+        payload = NULL;
+        cmdData = NULL;
+        printf("Sending ZCL command with SeqNum = %d\n", seqNUm);
+        printf("Enter the resourceEui\n");
+        memset(resourceEui, 0, 17);
+        scanf("%s", resourceEui);
+        printf("Is Command Manufacturer Specific?\n 0-> No\n 1->Yes\n");
+        scanf("%d", &manuf);
+        if (manuf < 0 || manuf > 1) {
+          printf("Error: Invalid Input \n");
+          break;
+        }
+        printf("Enter the endpointId\n");
+        scanf("%d", &epId);
+        printf("Enter the clusterId\n");
+        scanf("%d", &clusterId);
+        printf("Enter the commandId\n");
+        scanf("%d", &commandId);
+        printf("Enter the payloadLen\n");
+        scanf("%d", &payloadLen);
+        if (0 != payloadLen) {
+          printf("Enter payload byte stream:\n");
+          payload = malloc((payloadLen * 2) * sizeof(char));
+          memset(payload, 0, (payloadLen * 2));
+          scanf("%s", payload);
+          cmdData = malloc(payloadLen * sizeof(char));
+          memset(cmdData, 0, payloadLen);
+          string_to_byte_stream(payload, cmdData);
+        }
+
+        string_to_byte_stream(resourceEui, deviceId);
+        rbsdk_zcl_cmd(deviceId, manuf, epId, clusterId, commandId, cmdData, payloadLen, &seqNUm);
+        break;
       default:
         printf("Invalid input. Please try again\n");
     }
