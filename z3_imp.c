@@ -351,7 +351,7 @@ stZclCluster_t my_zcl_clusters[] = {
 			5, {
 				{0x0000, "ZoneState", 			t_ENUM8, 	-1, -1, 		"r", 1, "\x00", 															'M', 0, 0, 0, 0},
 				{0x0001, "ZoneType", 				t_ENUM16, -1, -1, 		"r", 2, "\x00\x00", 													'M', 0, 0, 0, 0},
-				{0x0002, "ZoneStatus", 			t_MAP16,	-1, -1, 		"r", 2, "\x00\x00", 													'm', 1, 60, 900, 0x1},
+				{0x0002, "ZoneStatus", 			t_MAP16,	-1, -1, 		"rr", 2, "\x00\x00", 													'm', 1, 1, 1800, 0x1},
 				{0x0010, "IAS_CIE_Address", t_EUI64,	-1,	-1, 		"rw",8, "\x00\x00\x00\x00\x00\x00\x00\x00",  	'M', 0, 0, 0, 0},
 				{0x0011, "ZoneID",					t_UINT8, 0x00, 0xff,	"r", 1, "\xff", 															'M', 0, 0, 0, 0},
 			},
@@ -371,7 +371,7 @@ stZclCluster_t my_zcl_clusters[] = {
 		{
 			1,
 			0, {
-				{0x0000, "ZoneState", 			t_ENUM8, 	-1, -1, 		"r", 1, "\x00", 															'M', 0, 0, 0, 0},
+				{0x0000, "ZoneState", 			t_ENUM8, 	-1, -1, 		"r", 1, "\x00", 'M', 0, 0, 0, 0},
 			},
 			0, {
 				{0x00, "Zone Enroll Response", 'M'},
@@ -809,6 +809,22 @@ stZclCluster_t my_zcl_clusters[] = {
 		},
 		{0},
 	},
+
+	/*[0xFFAD] = */{
+		0xFFAD, "Infrared Blaster",
+		{
+			1,
+			0, {
+			},
+			3, {
+				{0x10, "Learning Mode",			'M'},
+				{0x1F, "Send Learned command",			'M'},
+			},
+			0, {
+			},
+		},
+		{0},
+	},
 };
 
 stZclCluster_t *z3_get_clusters() {
@@ -954,7 +970,7 @@ static int run_flag = 0;
 void *rbsdk_thread(void *arg) {
   printf("z3Imp rbsdk_thread Started\n");
 	static char *argv[] = {
-		"rbsdk", "-n1", "-p /dev/ttyS2", "-b115200", "-d", NULL
+		"rbsdk", "-n1", "-p /dev/ttyS1", "-b115200", "-d", NULL
 	};
 
 	int argc = sizeof(argv)/sizeof(argv[0]);
@@ -995,6 +1011,13 @@ int rbsdk_vers(char *version) {
 	}
 	strcpy(version, z3_version());
   printf("z3Imp rbsdk_vers Done\n");
+	return 0;
+}
+
+int rbsdk_list_dev(void (*cb)(char *addr, int *epList, int epListLen, char *ModelStr, char *model, int type, int battery)) {
+	printf("Z3Imp rbsdk_list_dev\n");
+	z3_list_device_a(cb);
+	printf("Z3Imp rbsdk_list_dev Done\n");
 	return 0;
 }
 

@@ -37,6 +37,23 @@ extern "C" {
    */
 	int rbsdk_vers(char *version);
 
+	/** rbsdk_list_dev
+   *
+   * get rbsdk version
+   *
+   * @param[in] cb list callback function
+   *
+   * @return 0->ok, else failed
+   *
+   * @warning none
+   *
+   * @note none
+   *
+   * @see none
+   */
+	int rbsdk_list_dev(void (*cb)(char *addr, int *epList, int epListLen, char *ModelStr, char *model, int type, int battery));
+
+
 	/**> Externed */
 	typedef struct stDevMsgCb {
 		int (*rpt_dev_added)(char *mac, char *ModelStr, char *model, int type, int battery, int *epList, int epListLen);

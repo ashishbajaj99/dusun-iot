@@ -254,6 +254,24 @@ int z3_get_att_ret(char *addr, unsigned char ep, unsigned short clsid, unsigned 
  */
 stZ3Device_t *z3_get_device(char *addr);
 
+/** z3_list_device(void (*cb)(char *addr, int *epList, int epListLen, char *ModelStr, char *model, int type, int battery));
+ *
+ * list local device 
+ *
+ * @param[in] cb			callback function to each device
+ *
+ * @return 
+ *
+ * @warning none
+ *
+ * @note none
+ *
+ * @see none
+ */
+void z3_list_device(void (*cb)(char *addr, int *epList, int epListLen, char *ModelStr, char *model, int type, int battery));
+void z3_list_device_a(void (*cb)(char *addr, int *epList, int epListLen, char *ModelStr, char *model, int type, int battery));
+
+
 /** z3_run
  *
  * start zigbee 3 stack, it will not return 

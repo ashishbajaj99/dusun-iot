@@ -67,6 +67,9 @@ static int zigbee_sdk_cmd_status_cb(char *deviceEui, int endpoint, int clusterId
 static int string_to_uint8(const char *str, char *retval);
 static int string_to_byte_stream(const char *str, char *bytes);
 static char *byte_stream_to_str(char *bytes, char *str);
+static void zigbee_sdk_list_resource();
+static void callback_list_resource(char *deviceEui, int *epList, int epCount, char *modelStr,
+                                   char *model, int type, int battery);
 
 /*************************************************************************************
  *                          GLOBAL VARIABLES                                         *
@@ -162,9 +165,7 @@ static int zigbee_sdk_discover_resource(void) {
  *************************************************************************************/
 static int zigbee_sdk_rem_resource(char *deviceEui) {
   printf("Removing resource: %s\n", deviceEui);
-  char deviceId[8] = { 0 };
-
-  string_to_byte_stream(deviceEui, deviceId);
+  rbsdk_del_dev(deviceEui);
   return 0;
 }
 
@@ -271,6 +272,29 @@ static int zigbee_sdk_cmd_status_cb(char *deviceEui, int endpoint, int clusterId
   return 0;
 }
 
+/*************************************************************************************
+ * Refer to the header file for a detailed description                               *
+ *************************************************************************************/
+static void callback_list_resource(char *deviceEui, int *epList, int epCount, char *modelStr,
+                            char *model, int type, int battery) {
+  char deviceId[17] = { 0 };
+
+  byte_stream_to_str(deviceEui, deviceId);
+
+  printf("Resource : %s with Model: %s and Model : %s, with type %d having batteryPct :"
+         " %d added successfully with noOf endpoints :%d\n", deviceId, modelStr, model,
+         type, battery, epCount);
+
+}
+
+/*************************************************************************************
+ * Refer to the header file for a detailed description                               *
+ *************************************************************************************/
+static void zigbee_sdk_list_resource() {
+  printf("Listing resources\n");
+	rbsdk_list_dev(callback_list_resource);
+}
+
 /******************************************************************************
 Name        : zigbee_sdk_init
 Input(s)    : int argc, char *argv[] - standard inputs to the main routine
@@ -331,7 +355,7 @@ Description : Inits the application and then falls into a dispatch loop
 *******************************************************************************/
 int main(int argc, char *argv[]) {
   zigbee_sdk_init(argc, argv);
-  int choice, epId, clusterId, attributeId, commandId, payloadLen, manuf;
+  int i, choice, epId, clusterId, attributeId, commandId, payloadLen, manuf, cmdCnt;
   char *resourceEui = malloc(17 * sizeof(char));
   char *payload = NULL, *cmdData = NULL;
   char deviceId[8] = { 0 };
@@ -340,29 +364,37 @@ int main(int argc, char *argv[]) {
   do {
     printf("Select one of the below:\n");
     printf("0. Exit\n");
-    printf("1. Discover and Add resources\n");
-    printf("2. Remove resource\n");
-    printf("3. Read Attribute\n");
-    printf("4. Send Command \n");
+    printf("1. List resources\n");
+    printf("2. Discover and Add resources\n");
+    printf("3. Remove resource\n");
+    printf("4. Read Attribute\n");
+    printf("5. Send Command \n");
+    printf("6. Send Multiple Command \n");
     scanf("%d", &choice);
 
     switch(choice) {
       case 0:
         return EXIT_SUCCESS;
 
-      case 1:
+			case 1:
+				printf("list devices...\n");
+				zigbee_sdk_list_resource();
+				break;
+
+      case 2:
         zigbee_sdk_discover_resource();
         break;
 
-      case 2:
+      case 3:
         printf("Sending remove resource command to device\n");
         printf("Enter the resourceEui\n");
         memset(resourceEui, 0, 17);
         scanf("%s", resourceEui);
-        zigbee_sdk_rem_resource(resourceEui);
+        string_to_byte_stream(resourceEui, deviceId);
+        zigbee_sdk_rem_resource(deviceId);
         break;
 
-      case 3:
+      case 4:
         printf("Sending read attribute command\n");
         printf("Enter the resourceEui\n");
         memset(resourceEui, 0, 17);
@@ -377,7 +409,7 @@ int main(int argc, char *argv[]) {
         rbsdk_get_attr(deviceId, epId, clusterId, attributeId);
         break;
 
-      case 4:
+      case 5:
         seqNUm++;
         payload = NULL;
         cmdData = NULL;
@@ -385,12 +417,8 @@ int main(int argc, char *argv[]) {
         printf("Enter the resourceEui\n");
         memset(resourceEui, 0, 17);
         scanf("%s", resourceEui);
-        printf("Is Command Manufacturer Specific?\n 0-> No\n 1->Yes\n");
+        printf("Is Command Manufacturer Specific?\n 0-> No\n manufId->Yes\n");
         scanf("%d", &manuf);
-        if (manuf < 0 || manuf > 1) {
-          printf("Error: Invalid Input \n");
-          break;
-        }
         printf("Enter the endpointId\n");
         scanf("%d", &epId);
         printf("Enter the clusterId\n");
@@ -408,10 +436,17 @@ int main(int argc, char *argv[]) {
           memset(cmdData, 0, payloadLen);
           string_to_byte_stream(payload, cmdData);
         }
-
         string_to_byte_stream(resourceEui, deviceId);
-        rbsdk_zcl_cmd(deviceId, manuf, epId, clusterId, commandId, cmdData, payloadLen, &seqNUm);
+        printf("Enter number of commands to be sent: \n");
+        scanf("%d", &cmdCnt);
+
+        for (i = 0; i < cmdCnt; i++) {
+          seqNUm++;
+          printf("Sending ZCL command with SeqNum = %d, payloadLen = %d\n", seqNUm, payloadLen);
+          rbsdk_zcl_cmd(deviceId, manuf, epId, clusterId, commandId, cmdData, payloadLen, &seqNUm);
+        }
         break;
+
       default:
         printf("Invalid input. Please try again\n");
     }
