@@ -472,7 +472,7 @@ stZclCluster_t my_zcl_clusters[] = {
 		{
 			1,
 			3, {
-				{0x0000, "MeasuredValue", 	 t_INT16, 0x0000, 0xffff, "rp", 2, "\x00\x00",	'm', 1, 1, 1800, 0x000A},
+				{0x0000, "MeasuredValue", 	 t_INT16, 0x0000, 0xffff, "rr", 2, "\x00\x00",	'm', 1, 1, 1800, 0x000A},
 				{0x0001, "MinMeasuredValue", t_INT16, 0x954d, 0x7ffe, "r",  2, "\x00\x00",	'M', 0},
 				{0x0002, "MaxMeasuredValue", t_INT16, 0x954e, 0x7fff, "r",  2, "\x00\x00",	'M', 0},
 			},
@@ -523,7 +523,7 @@ stZclCluster_t my_zcl_clusters[] = {
 		{
 			1,
 			3, {
-				{0x0000, "MeasuredValue", 	 t_UINT16, 0x0000, 0xfffe, 	"rp", 2, "\x00\x00",	'm', 1, 1, 1800, 0x000A},
+				{0x0000, "MeasuredValue", 	 t_UINT16, 0x0000, 0xfffe, 	"rr", 2, "\x00\x00",	'm', 1, 1, 1800, 0x000A},
 				{0x0001, "MinMeasuredValue", t_UINT16, 0x0000, 0x270f, 	"r", 	2, "\x00\x00",	'M', 0, 0, 0, 0},
 				{0x0002, "MaxMeasuredValue", t_UINT16, 0x0001, 0x2701, 	"r", 	2, "\x00\x00",	'M', 0, 0, 0, 0},
 			},
@@ -540,7 +540,7 @@ stZclCluster_t my_zcl_clusters[] = {
 		{
 			1,
 			2, {
-				{0x0000, "Occupancy", 					 t_MAP8,	0x00, 0xff, "rp", 1, "\x00", 'm', 1, 1, 1800, 0x0},
+				{0x0000, "Occupancy", 					 t_MAP8,	0x00, 0xff, "rr", 1, "\x00", 'm', 1, 1, 1800, 0x0},
 				{0x0001, "OccupancySensorType ", t_ENUM8, 0x00, 0xfe, "r", 	1, "\x00", 'M', 0, 0, 0, 0},
 			},
 			0, {
