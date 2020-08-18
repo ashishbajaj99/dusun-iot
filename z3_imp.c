@@ -604,14 +604,15 @@ stZclCluster_t my_zcl_clusters[] = {
 		{
 			1,
 			8, {
-				{0x0000, "CurrentSummationDelivered",	t_UINT48, 0x0, -1,			"r", 6,	"\x00\x00\x00\x00\x00\x00", 'm', 1, 1, 1800, 0x000A},
-				{0x0200, "Status",										t_MAP8,		0x0, 0xff,		"r", 1,	"\x00", 'M', 0, 0, 0, 0},
-				{0x0300, "UnitofMeasure",							t_ENUM8,	0x0, 0xff,		"r", 1,	"\x00", 'M', 0, 0, 0, 0},
-				{0x0301, "Multiplier",								t_UINT24, 0x0, 0xffffff,"r", 3,	"\x00\x00\x00", 'O', 0, 0, 0, 0},
-				{0x0302, "Divisor",										t_UINT24, 0x0, 0xffffff,"r", 3,	"\x00\x00\x00", 'O', 0, 0, 0, 0},
-				{0x0303, "SummationFormatting",				t_MAP8,		0x0, 0xff,		"r", 1,	"\x00", 'M', 0, 0, 0, 0},
-				{0x0306, "MeteringDeviceType",				t_MAP8,		0x0, 0xff,		"r", 1,	"\x00", 'M', 0, 0, 0, 0},
-				{0x0400, "InstantaneousDemand",				t_INT24,	0x0, 0xff,		"r", 3,	"\x00\x00\x00", 'o', 1, 1, 1800, 0x000A},
+				{0x0000, "CurrentSummationDelivered",	t_UINT48, 0x0, -1,			"rr", 6,	"\x00\x00\x00\x00\x00\x00", 'm', 1, 1, 1800, 0x00000000000A},
+				{0x0001, "CurrentSummationReceived",	t_UINT48, 0x0, -1,			"rr", 6,	"\x00\x00\x00\x00\x00\x00", 'm', 1, 1, 1800, 0x00000000000A},
+				{0x0200, "Status",										t_MAP8,		0x0, 0xff,		"r",  1,	"\x00", 'M', 0, 0, 0, 0},
+				{0x0300, "UnitofMeasure",							t_ENUM8,	0x0, 0xff,		"r",  1,	"\x00", 'M', 0, 0, 0, 0},
+				{0x0301, "Multiplier",								t_UINT24, 0x0, 0xffffff,"r",  3,	"\x00\x00\x00", 'O', 0, 0, 0, 0},
+				{0x0302, "Divisor",										t_UINT24, 0x0, 0xffffff,"r",  3,  "\x00\x00\x00", 'O', 0, 0, 0, 0},
+				{0x0303, "SummationFormatting",				t_MAP8,		0x0, 0xff,		"r",  1,  "\x00", 'M', 0, 0, 0, 0},
+				{0x0306, "MeteringDeviceType",				t_MAP8,		0x0, 0xff,		"r",  1,	"\x00", 'M', 0, 0, 0, 0},
+				{0x0400, "InstantaneousDemand",				t_INT24,	0x0, 0xff,		"rr", 3,	"\x00\x00\x00", 'o', 1, 1, 1800, 0x00000A},
 			},
 			0, {
 			},
