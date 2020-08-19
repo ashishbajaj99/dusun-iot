@@ -232,6 +232,7 @@ int z3_zcl_cmd_ret(char *addr, unsigned char ep, unsigned short clsid, char cmdi
 int z3_set_att_ret(char *addr, unsigned char ep, unsigned short clsid, unsigned short attr, int status, int linkQuality, void *context);
 int z3_get_att_ret(char *addr, unsigned char ep, unsigned short clsid, unsigned short attr, int status, int linkQuality, void *context);
 
+int z3_zcl_cmd_res(char *addr, unsigned char ep, unsigned short clusterid, unsigned char cmd, unsigned char seq, char *buf, int len);
 
 /*=============
  * Call Api Sync & Async

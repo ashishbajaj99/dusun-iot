@@ -160,7 +160,7 @@ stZclCluster_t my_zcl_clusters[] = {
 		{
 			1,
 			1, {
-				{0x0000, "OnOff", t_UINT16, 0x00, 0x01, "rr", 2, "\x00", 'm', 1, 1, 1800, 0x1},
+				{0x0000, "OnOff", t_UINT16, 0x00, 0x01, "rr", 1, "\x00", 'm', 1, 1, 1800, 0x1},
 			},
 			3, {
 				{0x00, "Off",			'M'},
@@ -472,7 +472,7 @@ stZclCluster_t my_zcl_clusters[] = {
 		{
 			1,
 			3, {
-				{0x0000, "MeasuredValue", 	 t_INT16, 0x0000, 0xffff, "rr", 2, "\x00\x00",	'm', 1, 1, 1800, 0x000A},
+				{0x0000, "MeasuredValue", 	 t_INT16, 0x0000, 0xffff, "rp", 2, "\x00\x00",	'm', 1, 1, 1800, 0x000A},
 				{0x0001, "MinMeasuredValue", t_INT16, 0x954d, 0x7ffe, "r",  2, "\x00\x00",	'M', 0},
 				{0x0002, "MaxMeasuredValue", t_INT16, 0x954e, 0x7fff, "r",  2, "\x00\x00",	'M', 0},
 			},
@@ -506,7 +506,7 @@ stZclCluster_t my_zcl_clusters[] = {
 		{
 			1,
 			3, {
-				{0x0000, "MeasuredValue", 					t_UINT16,	0x0000, 0xfffe, 	"rp", 	2, "\x00\x00",	'm', 1, 0, 1800, 0},
+				{0x0000, "MeasuredValue", 					t_UINT16,	0x0000, 0xfffe, 	"rp", 	2, "\x00\x00",	'm', 1, 1, 1800, 0},
 				{0x0001, "MinMeasuredValue",				t_UINT16, 0x0001, 0xfffd, 	"r", 		2, "\x00\x00",	'M', 0, 0, 0, 0},
 				{0x0002, "MaxMeasuredValue",				t_UINT16, 0x0002, 0xfffe, 	"r", 		2, "\x00\x00",	'M', 0, 0, 0, 0},
 			},
@@ -523,7 +523,7 @@ stZclCluster_t my_zcl_clusters[] = {
 		{
 			1,
 			3, {
-				{0x0000, "MeasuredValue", 	 t_UINT16, 0x0000, 0xfffe, 	"rr", 2, "\x00\x00",	'm', 1, 1, 1800, 0x000A},
+				{0x0000, "MeasuredValue", 	 t_UINT16, 0x0000, 0xfffe, 	"rp", 2, "\x00\x00",	'm', 1, 1, 1800, 0x000A},
 				{0x0001, "MinMeasuredValue", t_UINT16, 0x0000, 0x270f, 	"r", 	2, "\x00\x00",	'M', 0, 0, 0, 0},
 				{0x0002, "MaxMeasuredValue", t_UINT16, 0x0001, 0x2701, 	"r", 	2, "\x00\x00",	'M', 0, 0, 0, 0},
 			},
@@ -540,7 +540,7 @@ stZclCluster_t my_zcl_clusters[] = {
 		{
 			1,
 			2, {
-				{0x0000, "Occupancy", 					 t_MAP8,	0x00, 0xff, "rr", 1, "\x00", 'm', 1, 1, 1800, 0x0},
+				{0x0000, "Occupancy", 					 t_MAP8,	0x00, 0xff, "rp", 1, "\x00", 'm', 1, 1, 1800, 0x0},
 				{0x0001, "OccupancySensorType ", t_ENUM8, 0x00, 0xfe, "r", 	1, "\x00", 'M', 0, 0, 0, 0},
 			},
 			0, {
@@ -604,15 +604,15 @@ stZclCluster_t my_zcl_clusters[] = {
 		{
 			1,
 			8, {
-				{0x0000, "CurrentSummationDelivered",	t_UINT48, 0x0, -1,			"rr", 6,	"\x00\x00\x00\x00\x00\x00", 'm', 1, 1, 1800, 0x00000000000A},
-				{0x0001, "CurrentSummationReceived",	t_UINT48, 0x0, -1,			"rr", 6,	"\x00\x00\x00\x00\x00\x00", 'm', 1, 1, 1800, 0x00000000000A},
+				{0x0000, "CurrentSummationDelivered",	t_UINT48, 0x0, -1,			"rr", 6,	"\x00\x00\x00\x00\x00\x00", 'm', 1, 1, 1800, 0x000000000001},
+				{0x0001, "CurrentSummationReceived",	t_UINT48, 0x0, -1,			"rr", 6,	"\x00\x00\x00\x00\x00\x00", 'm', 1, 1, 1800, 0x000000000001},
 				{0x0200, "Status",										t_MAP8,		0x0, 0xff,		"r",  1,	"\x00", 'M', 0, 0, 0, 0},
 				{0x0300, "UnitofMeasure",							t_ENUM8,	0x0, 0xff,		"r",  1,	"\x00", 'M', 0, 0, 0, 0},
 				{0x0301, "Multiplier",								t_UINT24, 0x0, 0xffffff,"r",  3,	"\x00\x00\x00", 'O', 0, 0, 0, 0},
 				{0x0302, "Divisor",										t_UINT24, 0x0, 0xffffff,"r",  3,  "\x00\x00\x00", 'O', 0, 0, 0, 0},
 				{0x0303, "SummationFormatting",				t_MAP8,		0x0, 0xff,		"r",  1,  "\x00", 'M', 0, 0, 0, 0},
 				{0x0306, "MeteringDeviceType",				t_MAP8,		0x0, 0xff,		"r",  1,	"\x00", 'M', 0, 0, 0, 0},
-				{0x0400, "InstantaneousDemand",				t_INT24,	0x0, 0xff,		"rr", 3,	"\x00\x00\x00", 'o', 1, 1, 1800, 0x00000A},
+				{0x0400, "InstantaneousDemand",				t_INT24,	0x0, 0xffffff,"rr", 3,	"\x00\x00\x00", 'o', 1, 1, 1800, 0x000001},
 			},
 			0, {
 			},
@@ -963,6 +963,17 @@ int z3_exploration(char *addr, int status, int cluster) {
 	return 0;
 }
 
+int z3_zcl_cmd_res(char *addr, unsigned char ep, unsigned short clusterid, unsigned char cmd, unsigned char seq, char *buf, int len) {
+	char str[32];
+	log_info("%s, seq:%02X, buf[0]:%02X, buf[1]:%02X", mac2str(addr, str), seq&0xff, buf[0]&0xff, buf[1]&0xff);
+
+	if (dmc->rpt_zcl_cmd_response != NULL) {
+		dmc->rpt_zcl_cmd_response(addr, ep&0xff, clusterid&0xffff, cmd&0xff, seq&0xff, buf, len&0xff);
+	}
+
+	return 0;
+}
+
 /*============
  * rbsdk
  *=============================================================*/
@@ -971,9 +982,14 @@ static int run_flag = 0;
 void *rbsdk_thread(void *arg) {
   printf("z3Imp rbsdk_thread Started\n");
 	static char *argv[] = {
-		"rbsdk", "-n1", "-p /dev/ttyS1", "-b115200", "-d", NULL
+		"rbsdk", "-n1", "-p/dev/ttyS1", "-b115200", "-d", NULL
 	};
 
+	const char *system_model_get();
+	const char *model = system_model_get();
+	if (strstr(model, "DSI0177") != NULL) {
+		argv[2] = "-p/dev/ttyS2";
+	}
 	int argc = sizeof(argv)/sizeof(argv[0]);
 
 	run_flag = 1;

@@ -70,6 +70,8 @@ extern "C" {
 		int (*rpt_exploration)(char *mac, int status, int cluster);
 		/**> zcl cmd status */
 		int (*rpt_zcl_cmd_status)(char *mac, int ep, int cluster, int cmdid, int status, int linkQuality, void *context);
+		/**> zcl cmd response */
+		int (*rpt_zcl_cmd_response)(char *mac, int ep, int cluster, int cmdid, int seq, char *buf, int len);
 	} stDevMsgCb_t;
 
 
