@@ -222,13 +222,27 @@ int z3_simple_desc(char *addr, unsigned char ep, char *buf, int len);
 
 /**
  * -1 any faile
- * 0  accoc
- * 1  bind success any given cluster
- * 2  configure success
+ * 1  rbsdk_add_dev or assoc  ok
+ * 2  match desc req ok
+ * 3  active_endpiont_req  ok
+ * 4  simple ok
+ * 5  read report ok
+ * 6  config report ok
+ * 7  bind req ok
+ * 8  zone_enroolment ok
+ * ---------------------------------
+ * -1  rbsdk_add_dev failed or timeou
+ * -2  match desc req failed or timeout
+ * -3  active_endpiont_req  failed or timeout
+ * -4  simple failed or timeout
+ * -5  read report failed or timeout
+ * -6  config report failed or timeout
+ * -7  bind req faile or timeout
+ * -8  zone_enroolment failed or timeout
  **/
 int z3_exploration(char *addr, int status, int cluster);
 
-int z3_zcl_cmd_ret(char *addr, unsigned char ep, unsigned short clsid, char cmdid, int status, int linkQuality, void *context);
+int z3_zcl_cmd_ret(char *addr, unsigned char ep, unsigned short clsid, char cmdid, int status, int linkQuality, void *context, unsigned char seq);
 int z3_set_att_ret(char *addr, unsigned char ep, unsigned short clsid, unsigned short attr, int status, int linkQuality, void *context);
 int z3_get_att_ret(char *addr, unsigned char ep, unsigned short clsid, unsigned short attr, int status, int linkQuality, void *context);
 

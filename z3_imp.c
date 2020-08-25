@@ -862,10 +862,10 @@ int z3_register(char *addr, int *epList, int epListLen, char *ModelStr, char *mo
 	}
 
 	char str[32];
-	log_info("%s,epList:%s, ModelStr:%s, model:%s, type:%d, battery:%d",
+	log_info("%s,epList:%s, ModelStr:%s, model:%s, type:%d, battery:%d", 
 		mac2str(addr, str), buf, ModelStr, model, type, battery);
 
-	if (dmc->rpt_dev_added != NULL) {
+	if (dmc && dmc->rpt_dev_added != NULL) {
 		dmc->rpt_dev_added(addr, ModelStr, model, type, battery, epList, epListLen);
 	}
 
@@ -876,7 +876,7 @@ int z3_unregister(char *addr) {
 	char str[32];
 	log_info("%s", mac2str(addr, str));
 
-	if (dmc->rpt_dev_deled != NULL) {
+	if (dmc && dmc->rpt_dev_deled != NULL) {
 		dmc->rpt_dev_deled(addr);
 	}
 
@@ -887,7 +887,7 @@ int z3_online(char *addr, long last, int online) {
 	char str[32];
 	log_info("%s", mac2str(addr, str));
 
-	if (dmc->rpt_dev_online != NULL) {
+	if (dmc && dmc->rpt_dev_online != NULL) {
 		dmc->rpt_dev_online(addr, online);
 	}
 
@@ -899,7 +899,7 @@ int z3_attr(char *addr, unsigned char ep, unsigned short clsid,  const char *buf
 	log_info("%s, ep:%02X, cluster:%02X, linkQuality:%02X", mac2str(addr, str), ep&0xff, clsid&0xffff, linkQuality&0xff);
 	log_debug_hex("data:", buf, len);
 
-	if (dmc->rpt_attr != NULL) {
+	if (dmc && dmc->rpt_attr != NULL) {
 		short attrid = ((buf[0]&0xff) | ((buf[1]&0xff) << 8))&0xffff;
 		dmc->rpt_attr(addr, ep, clsid&0xffff, attrid&0xffff, (char *)(buf + 2), len - 2, linkQuality);
 	}
@@ -912,20 +912,19 @@ int z3_cmd(char *addr, unsigned char ep, unsigned short clsid, const char *buf, 
 	log_info("%s, ep:%02X, cluster:%02X, linkQuality:%02X", mac2str(addr, str), ep&0xff, clsid&0xffff, linkQuality&0xff);
 	log_debug_hex("data:", buf, len);
 
-	if (dmc->rpt_cmd != NULL) {
+	if (dmc && dmc->rpt_cmd != NULL) {
 		char cmd = buf[2]&0xff;
 		dmc->rpt_cmd(addr, ep, clsid&0xffff, cmd&0xff, (char *)(buf + 3), len - 3, linkQuality);
 	}
 
 	return 0;
 }
-
-int z3_zcl_cmd_ret(char *addr, unsigned char ep, unsigned short clsid, char cmdid, int status, int linkQuality, void *context) {
+int z3_zcl_cmd_ret(char *addr, unsigned char ep, unsigned short clsid, char cmdid, int status, int linkQuality, void *context, unsigned char seq) {
 	char str[32];
-	log_info("%s, ep:%02X, cluster:%02X, linkQuality:%02X, status:%d", mac2str(addr, str), ep&0xff, clsid&0xffff, linkQuality&0xff, status);
-
-	if (dmc->rpt_zcl_cmd_status != NULL) {
-		dmc->rpt_zcl_cmd_status(addr, ep&0xff, clsid&0xffff, cmdid&0xff, status, linkQuality, context);
+	log_info("%s, ep:%02X, cluster:%02X, linkQuality:%02X, status:%d, seq:%02X", mac2str(addr, str), ep&0xff, clsid&0xffff, linkQuality&0xff, status, seq&0xff);
+	
+	if (dmc && dmc->rpt_zcl_cmd_status != NULL) {
+		dmc->rpt_zcl_cmd_status(addr, ep&0xff, clsid&0xffff, cmdid&0xff, status, linkQuality, context, seq);
 	}
 	return 0;
 }
@@ -947,7 +946,7 @@ int z3_simple_desc(char *addr, unsigned char ep, char *buf, int len) {
 	log_info("%s, ep:%02X", mac2str(addr, str), ep&0xff);
 	log_debug_hex("data:", buf, len);
 
-	if (dmc->rpt_simp_desc != NULL) {
+	if (dmc && dmc->rpt_simp_desc != NULL) {
 			dmc->rpt_simp_desc(addr, ep, buf, len);
 	}
 	return 0;
@@ -955,9 +954,10 @@ int z3_simple_desc(char *addr, unsigned char ep, char *buf, int len) {
 
 int z3_exploration(char *addr, int status, int cluster) {
 	char str[32];
-	log_info("%s, status:%02X", mac2str(addr, str), status&0xff);
+	//log_info("%s, status:%02X", mac2str(addr, str), status&0xff);
+	log_info("%s, status:%d", mac2str(addr, str), status);
 
-	if (dmc->rpt_exploration != NULL) {
+	if (dmc && dmc->rpt_exploration != NULL) {
 		dmc->rpt_exploration(addr, status, cluster);
 	}
 	return 0;
@@ -967,7 +967,7 @@ int z3_zcl_cmd_res(char *addr, unsigned char ep, unsigned short clusterid, unsig
 	char str[32];
 	log_info("%s, seq:%02X, buf[0]:%02X, buf[1]:%02X", mac2str(addr, str), seq&0xff, buf[0]&0xff, buf[1]&0xff);
 
-	if (dmc->rpt_zcl_cmd_response != NULL) {
+	if (dmc && dmc->rpt_zcl_cmd_response != NULL) {
 		dmc->rpt_zcl_cmd_response(addr, ep&0xff, clusterid&0xffff, cmd&0xff, seq&0xff, buf, len&0xff);
 	}
 
