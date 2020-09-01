@@ -955,7 +955,7 @@ int z3_simple_desc(char *addr, unsigned char ep, char *buf, int len) {
 int z3_exploration(char *addr, int status, int cluster) {
 	char str[32];
 	//log_info("%s, status:%02X", mac2str(addr, str), status&0xff);
-	log_info("%s, status:%d", mac2str(addr, str), status);
+	log_info("%s, status:%d, cluster:%d", mac2str(addr, str), status, cluster);
 
 	if (dmc && dmc->rpt_exploration != NULL) {
 		dmc->rpt_exploration(addr, status, cluster);
