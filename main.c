@@ -438,7 +438,7 @@ int main(int argc, char *argv[]) {
         printf("Enter the resourceEui\n");
         memset(resourceEui, 0, 17);
         scanf("%s", resourceEui);
-        printf("Is Command Manufacturer Specific?\n 0-> No\nmanufId->Yes\n");
+        printf("Is Command Manufacturer Specific?\n0->No\nmanufId->Yes\n");
         scanf("%d", &manuf);
         printf("Enter the endpointId\n");
         scanf("%d", &epId);
@@ -465,8 +465,8 @@ int main(int argc, char *argv[]) {
           seqNUm++;
           seqNumContext = malloc(sizeof(int));
           *seqNumContext = seqNUm;
-          printf("Sending ZCL command with cntext: %p, SeqNum = %d, payloadLen = %d\n",
-                 seqNumContext, *seqNumContext, payloadLen);
+          printf("Sending ZCL command with context: %p, SeqNum = %d, payloadLen = %d, manufCode: %04X\n",
+                 seqNumContext, *seqNumContext, payloadLen, manuf);
           rbsdk_zcl_cmd(deviceId, manuf, epId, clusterId, commandId, cmdData, payloadLen, seqNumContext);
           sleep(1);
         }
