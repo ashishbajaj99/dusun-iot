@@ -893,6 +893,7 @@ int z3_register(char *addr, int *epList, int epListLen, char *ModelStr, char *mo
 
               if (0 == strlen(buf)) {
                 buf = malloc(5);
+                memset(buf, 0, 5);
                 strcpy(buf, "InD1");
                 log_info("ModelId Attr: %s", buf);
               }
