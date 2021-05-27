@@ -36,14 +36,16 @@
 		<Compiler>
 			<Add option="-Wall" />
 		</Compiler>
-		<Unit filename="CMakeLists.txt" />
+		<Unit filename="Makefile" />
 		<Unit filename="main.c">
 			<Option compilerVar="CC" />
 		</Unit>
 		<Unit filename="rbsdk.h" />
+		<Unit filename="z3.h" />
 		<Unit filename="z3_imp.c">
 			<Option compilerVar="CC" />
 		</Unit>
+		<Unit filename="z3_slog.h" />
 		<Extensions>
 			<code_completion />
 			<envvars />
