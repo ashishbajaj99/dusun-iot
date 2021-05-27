@@ -33,6 +33,7 @@
 #define _POSIX_C_SOURCE 200112L
 #include <stdio.h>
 #include <stdlib.h>
+#include <stdint.h>
 #include <errno.h>
 #include <string.h>
 #include <unistd.h>
@@ -250,7 +251,6 @@ static int zigbee_sdk_attrib_cb(char *deviceEui, int endpoint, int clusterId, in
 static int zigbee_sdk_simple_desc_cb(char *deviceEui, unsigned char endpoint, char *payload,
                                      int payloadLen) {
   char deviceId[17] = { 0 };
-
   byte_stream_to_str(deviceEui, deviceId);
   printf("Simple descriptor Report for Resource : %s and endpointId: %d "
          "with payloadLen: %d\n", deviceId, endpoint, payloadLen);
@@ -277,10 +277,14 @@ static int zigbee_sdk_cmd_status_cb(char *deviceEui, int endpoint, int clusterId
   int *contextSeqNum = (int *)context;
 
   byte_stream_to_str(deviceEui, deviceId);
-  printf("Received command status with cntext: %p, SeqNum = %d\n", contextSeqNum, *contextSeqNum);
+
+  if (NULL != contextSeqNum) {
+    printf("Received command status with context: %p, SeqNum = %d\n", contextSeqNum,
+           *contextSeqNum);
+  }
   printf("Resource : %s, endpointId: %d, clusterId: %d command: %d processed "
-         "with status: %d and linkQuality: %d having contextSeqNum: %d, seqNum: %02X\n", deviceId,
-         endpoint, clusterId, cmdId, status, linkQuality, *contextSeqNum, seqNum);
+         "with status: %d and linkQuality: %d having seqNum: %02X\n", deviceId,
+         endpoint, clusterId, cmdId, status, linkQuality, seqNum);
   return 0;
 }
 
@@ -336,19 +340,15 @@ static int zigbee_sdk_init(int argc, char *argv[] ) {
   zigbeeSdkMsgCb->rpt_dev_deled = zigbee_sdk_rem_res_cb;
   zigbeeSdkMsgCb->rpt_dev_online = zigbee_sdk_online_res_cb;
 
-  printf("TestApp rbsdk_dev_msgcb_set Started\n");
   if (0 != rbsdk_dev_msgcb_set(zigbeeSdkMsgCb)) {
     printf("Fatal: Unable to set library callbacks\n");
     return EXIT_FAILURE;
   }
-  printf("TestApp rbsdk_dev_msgcb_set Done\n");
 
-  printf("TestApp rbsdk_vers Started\n");
   if (0 != rbsdk_vers(sdkVer)) {
     printf("Fatal: Unable to get library version\n");
     return EXIT_FAILURE;
   }
-  printf("TestApp rbsdk_vers Started\n");
 
   printf("TestApp zigbee sdk initialized successfully with version: %s\n", sdkVer);
   return 0;
@@ -432,13 +432,13 @@ int main(int argc, char *argv[]) {
         break;
 
       case 6:
+        printf("Sending resource command\n");
         payload = NULL;
         cmdData = NULL;
-        printf("Sending ZCL command with SeqNum = %d\n", seqNUm);
         printf("Enter the resourceEui\n");
         memset(resourceEui, 0, 17);
         scanf("%s", resourceEui);
-        printf("Is Command Manufacturer Specific?\n 0-> No\n manufId->Yes\n");
+        printf("Is Command Manufacturer Specific?\n0->No\nmanufId->Yes\n");
         scanf("%d", &manuf);
         printf("Enter the endpointId\n");
         scanf("%d", &epId);
@@ -465,8 +465,8 @@ int main(int argc, char *argv[]) {
           seqNUm++;
           seqNumContext = malloc(sizeof(int));
           *seqNumContext = seqNUm;
-          printf("Sending ZCL command with cntext: %p, SeqNum = %d, payloadLen = %d\n",
-                 seqNumContext, *seqNumContext, payloadLen);
+          printf("Sending ZCL command with context: %p, SeqNum = %d, payloadLen = %d, manufCode: %04X\n",
+                 seqNumContext, *seqNumContext, payloadLen, manuf);
           rbsdk_zcl_cmd(deviceId, manuf, epId, clusterId, commandId, cmdData, payloadLen, seqNumContext);
           sleep(1);
         }

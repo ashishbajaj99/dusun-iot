@@ -19,7 +19,7 @@ export  PATH		:= $(PATH):$(STAGING_DIR)/toolchain-mipsel_24kec+dsp_gcc-4.8-linar
 CROSS_CFLAGS		:= -I$(CROSSTOOLDIR)/staging_dir/toolchain-mipsel_24kec+dsp_gcc-4.8-linaro_uClibc-0.9.33.2/usr/include
 CROSS_CFLAGS		+= -I$(CROSSTOOLDIR)/staging_dir/target-mipsel_24kec+dsp_uClibc-0.9.33.2/usr/include
 CROSS_LDFLAGS		:= -L$(CROSSTOOLDIR)/staging_dir/toolchain-mipsel_24kec+dsp_gcc-4.8-linaro_uClibc-0.9.33.2/usr/lib
-CROSS_LDFLAGS		+= -L$(CROSSTOOLDIR)/staging_dir/target-mipsel_24kec+dsp_uClibc-0.9.33.2/usr/lib/ 
+CROSS_LDFLAGS		+= -L$(CROSSTOOLDIR)/staging_dir/target-mipsel_24kec+dsp_uClibc-0.9.33.2/usr/lib/
 endif
 
 GCC 			:= $(CROSS)gcc
@@ -34,13 +34,13 @@ SIZE			:= $(CROSS)size
 LD			:= $(CROSS)ld
 MKDIR			:= mkdir -p
 
-CFLAGS			:= -Wall -g -O2 -I$(ROOTDIR)/libs/osi/include  -I$(ROOTDIR)/libs/other/include 
+CFLAGS			:= -Wall -g -O2 -I$(ROOTDIR)/libs/osi/include  -I$(ROOTDIR)/libs/other/include
 CFLAGS			+= -I$(ROOTDIR)/include
 CFLAGS			+= -fPIC
 CFLAGS			+= -fpermissive
-CXXFLAGS		:= -std=c++0x 
+CXXFLAGS		:= -std=c++0x
 CXXFLAGS		+= $(CFLAGS)
-TARGET_CFLAGS		+= $(CROSS_CFLAGS) 
+TARGET_CFLAGS		+= $(CROSS_CFLAGS)
 
 
 LDFLAGS			:= -lm -lrt -ldl -lpthread -ljson-c -lubox -lblobmsg_json -lubus -lcares -lmosquitto -lssl -lcrypto

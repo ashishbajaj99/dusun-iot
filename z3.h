@@ -53,8 +53,8 @@ typedef struct stSimplerDesc {
 }stSimplerDesc_t;
 
 typedef struct stZ3Device {
-	unsigned char					extaddr[8]; 
-	short									nwkaddr; 
+	unsigned char					extaddr[8];
+	short									nwkaddr;
 
 	int										epcnt;
 	stSimplerDesc_t				*epdescs;
@@ -170,7 +170,7 @@ enum {
 
 	t_SET			= 0x50,
 	t_BAG			= 0x51,
-	
+
 	t_TOD				= 0xe0,
 	t_DATE			= 0xe1,
 	t_UTC				= 0xe2,
@@ -183,7 +183,7 @@ enum {
 	t_UNK				= 0xff,
 
 	/*
-	t_UINT8 	= 0x00, 
+	t_UINT8 	= 0x00,
 	t_MAP32		= 0x01,
 	t_UINT16 	= 0x02,
 	t_MAP8		= 0x03,
@@ -201,17 +201,22 @@ enum {
 	*/
 };
 
+typedef stZ3Device_t stZigbeeDevice_t;
+typedef stSimplerDesc_t stZigbeeSimplerDesc_t;
+typedef stCluster_t stZigbeeCluster_t;
+typedef stAttr_t stZigbeeAttr_t;
+
 /*=============
- * To Implement 
+ * To Implement
  *===========================================================================================*/
 stZclCluster_t *z3_get_clusters();
 int z3_get_clusters_cnt();
 
 /*=============
- * Callback Api 
+ * Callback Api
  *===========================================================================================*/
-/* 
- * @param[in] addr				- 8bytes device's mac 
+/*
+ * @param[in] addr				- 8bytes device's mac
  * */
 int z3_register(char *addr, int *epList, int epListLen, char *ModelStr, char *model, int type, int battery);
 int z3_unregister(char *addr);
@@ -255,7 +260,7 @@ int z3_zcl_cmd_res(char *addr, unsigned char ep, unsigned short clusterid, unsig
  *===========================================================================================*/
 /** z3_get_device(char *addr);
  *
- * get local device 
+ * get local device
  *
  * @param[in] addr			subdevice addr to send to
  *
@@ -271,11 +276,11 @@ stZ3Device_t *z3_get_device(char *addr);
 
 /** z3_list_device(void (*cb)(char *addr, int *epList, int epListLen, char *ModelStr, char *model, int type, int battery));
  *
- * list local device 
+ * list local device
  *
  * @param[in] cb			callback function to each device
  *
- * @return 
+ * @return
  *
  * @warning none
  *
@@ -289,10 +294,10 @@ void z3_list_device_a(void (*cb)(char *addr, int *epList, int epListLen, char *M
 
 /** z3_run
  *
- * start zigbee 3 stack, it will not return 
+ * start zigbee 3 stack, it will not return
  *
  * @param[in] argc	arguments count
- * @param[in] argv	arguments 
+ * @param[in] argv	arguments
  *
  * @return 0->ok, else failed.
  *
@@ -353,7 +358,7 @@ int z3_fd_reg(int fd, void (*func)(int fd));
  */
 int z3_fd_unreg(int fd, void (*func)(int fd));
 
-/** z3_permit 
+/** z3_permit
  *
  * open zigbee network, permit subdevice to join.
  *
@@ -443,7 +448,7 @@ int z3_set_att_a(char *addr, char ep, short cluster, short attrid, int attrtype,
  * @param[in] ep				subdevice endpoint to send to
  * @param[in] cluster		subdevice cluster to send to
  * @param[in] cmdid			subdevice command id to send to
- * @param[in] data			data to send 
+ * @param[in] data			data to send
  * @param[in] len				data len
  *
  * @return 0->ok, else failed.
@@ -466,7 +471,7 @@ int z3_zcl_cmd_a(char *addr, short manufacturer, char ep, short cluster, char cm
  * @param[in] ep				subdevice endpoint to send to
  * @param[in] cluster		subdevice cluster to send to
  * @param[in] cmdid			subdevice command id to send to
- * @param[in] data			data to send 
+ * @param[in] data			data to send
  * @param[in] len				data len
  *
  * @return 0->ok, else failed.
@@ -480,9 +485,15 @@ int z3_zcl_cmd_a(char *addr, short manufacturer, char ep, short cluster, char cm
 int z3_grp_cmd(short grpid, short manufacturer, char ep, short cluster, char cmdid, char *data, int len, void *context);
 int z3_grp_cmd_a(short grpid, short manufacturer, char ep, short cluster, char cmdid, char *data, int len, void *context);
 
+stZigbeeDevice_t      *zigbee_search_by_extaddr_ext(char extaddr[8]);
+unsigned char         zigbee_get_ep_value(stZigbeeDevice_t *zd, unsigned char ep);
+stZigbeeSimplerDesc_t *zigbee_simplerdesc_get(stZigbeeDevice_t *dev, unsigned char ep);
+stZigbeeCluster_t     *zigbee_cluster_get(stZigbeeSimplerDesc_t *simdesc, char inOrout, short cluster);
+stZigbeeAttr_t        *zigbee_attr_get(stZigbeeCluster_t *cluster, short attrid);
+
 /**
  * Problem :
- * 
+ *
  * 1. Provide End Point List Array in dev_added callback:  int (*rpt_dev_added)(char *mac, char *ModelStr, int *epList, int epListLen, char *model, int type, int battery);
  *		ok you can get this inormation from z3_get_device
  *
@@ -494,13 +505,13 @@ int z3_grp_cmd_a(short grpid, short manufacturer, char ep, short cluster, char c
  *
  * 4. Provide Simple Descriptor Response callback: int (*rpt_simple_desc_rsp)(char *mac, int ep, char *buf, int len);
  *
- * 5. Support manufacturer specific frame control and application context parameter: 
+ * 5. Support manufacturer specific frame control and application context parameter:
  *		int rbsdk_zcl_cmd(char *mac, int ep, int cluster, int manufacturerSpecific, int cmdid, char *data, int len, void *context);
  *
- * 6. Provide ZCL Command status callback with application context parameter returned: 
+ * 6. Provide ZCL Command status callback with application context parameter returned:
  *		int (*rpt_zcl_cmd_status)(char *mac, int ep, int cluster, int cmdid, int status, int linkQuality, void *context);
  *
- * 7. Add Bind request: Endpoint binding should be done for *all* the clusters specifically IAS_ZONE and IAS_ACE clusters 
+ * 7. Add Bind request: Endpoint binding should be done for *all* the clusters specifically IAS_ZONE and IAS_ACE clusters
  *		– we currently see that these clusters are not sent the command. We have devices that don’t report unless you explicitly bind.
  *
  * 8. Configure Reporting for battery operated devices: This should have minimum reporting interval as 900 sec to reduce battery impact. Currently it is 60 sec. It should remain 60 seconds for mains powered devices.

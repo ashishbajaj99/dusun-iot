@@ -10,7 +10,7 @@ all : $(targets)
 
 srcs		+= $(ROOTDIR)/main.c
 srcs		+= $(ROOTDIR)/z3_imp.c
-srcs	  	:= $(subst .cpp,.c,$(srcs))
+srcs	  := $(subst .cpp,.c,$(srcs))
 
 objs 		:= $(subst $(ROOTDIR),$(WORKDIR), $(subst .c,.o,$(srcs)))
 objs		+= $(ROOTDIR)/lib/libz3_v2.3.a
@@ -20,4 +20,4 @@ objs		+= $(ROOTDIR)/lib/libz3_v2.3.a
 
 $(eval $(call LinkApp,zigbeemodemapp,$(objs)))
 
-	
+
