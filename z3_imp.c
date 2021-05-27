@@ -36,7 +36,7 @@ stZclCluster_t my_zcl_clusters[] = {
 			2,
 			{
 				{0x0020, "BatteryVoltage",						 t_UINT8,	0x00, 0xff,	"r",	1, "\x00", 'O', 0},
-				{0x0021, "BatteryPercentageRemaining", t_UINT8, 0x00, 0xff,	"rr",	1, "\x00", 'O', 1, 1, 1800, 0x2},
+				{0x0021, "BatteryPercentageRemaining", t_UINT8, 0x00, 0xff,	"r",	1, "\x00", 'O', 1, 1, 1800, 0x2},
 			},
 			0, {
 			},
@@ -351,7 +351,7 @@ stZclCluster_t my_zcl_clusters[] = {
 			5, {
 				{0x0000, "ZoneState", 			t_ENUM8, 	-1, -1, 		"r", 1, "\x00", 															'M', 0, 0, 0, 0},
 				{0x0001, "ZoneType", 				t_ENUM16, -1, -1, 		"r", 2, "\x00\x00", 													'M', 0, 0, 0, 0},
-				{0x0002, "ZoneStatus", 			t_MAP16,	-1, -1, 		"rr", 2, "\x00\x00", 													'm', 1, 1, 1800, 0x1},
+				{0x0002, "ZoneStatus", 			t_MAP16,	-1, -1, 		"r", 2, "\x00\x00", 													'm', 1, 1, 1800, 0x1},
 				{0x0010, "IAS_CIE_Address", t_EUI64,	-1,	-1, 		"rw",8, "\x00\x00\x00\x00\x00\x00\x00\x00",  	'M', 0, 0, 0, 0},
 				{0x0011, "ZoneID",					t_UINT8, 0x00, 0xff,	"r", 1, "\xff", 															'M', 0, 0, 0, 0},
 			},
@@ -472,7 +472,7 @@ stZclCluster_t my_zcl_clusters[] = {
 		{
 			1,
 			3, {
-				{0x0000, "MeasuredValue", 	 t_INT16, 0x0000, 0xffff, "rp", 2, "\x00\x00",	'm', 1, 1, 1800, 0x000A},
+				{0x0000, "MeasuredValue", 	 t_INT16, 0x0000, 0xffff, "rr", 2, "\x00\x00",	'm', 1, 1, 1800, 0x000A},
 				{0x0001, "MinMeasuredValue", t_INT16, 0x954d, 0x7ffe, "r",  2, "\x00\x00",	'M', 0},
 				{0x0002, "MaxMeasuredValue", t_INT16, 0x954e, 0x7fff, "r",  2, "\x00\x00",	'M', 0},
 			},
@@ -506,7 +506,7 @@ stZclCluster_t my_zcl_clusters[] = {
 		{
 			1,
 			3, {
-				{0x0000, "MeasuredValue", 					t_UINT16,	0x0000, 0xfffe, 	"rp", 	2, "\x00\x00",	'm', 1, 1, 1800, 0},
+				{0x0000, "MeasuredValue", 					t_UINT16,	0x0000, 0xfffe, 	"rr", 	2, "\x00\x00",	'm', 1, 1, 1800, 0x0A},
 				{0x0001, "MinMeasuredValue",				t_UINT16, 0x0001, 0xfffd, 	"r", 		2, "\x00\x00",	'M', 0, 0, 0, 0},
 				{0x0002, "MaxMeasuredValue",				t_UINT16, 0x0002, 0xfffe, 	"r", 		2, "\x00\x00",	'M', 0, 0, 0, 0},
 			},
@@ -523,7 +523,7 @@ stZclCluster_t my_zcl_clusters[] = {
 		{
 			1,
 			3, {
-				{0x0000, "MeasuredValue", 	 t_UINT16, 0x0000, 0xfffe, 	"rp", 2, "\x00\x00",	'm', 1, 1, 1800, 0x000A},
+				{0x0000, "MeasuredValue", 	 t_UINT16, 0x0000, 0xfffe, 	"rr", 2, "\x00\x00",	'm', 1, 1, 1800, 0x000A},
 				{0x0001, "MinMeasuredValue", t_UINT16, 0x0000, 0x270f, 	"r", 	2, "\x00\x00",	'M', 0, 0, 0, 0},
 				{0x0002, "MaxMeasuredValue", t_UINT16, 0x0001, 0x2701, 	"r", 	2, "\x00\x00",	'M', 0, 0, 0, 0},
 			},
@@ -540,7 +540,7 @@ stZclCluster_t my_zcl_clusters[] = {
 		{
 			1,
 			2, {
-				{0x0000, "Occupancy", 					 t_MAP8,	0x00, 0xff, "rp", 1, "\x00", 'm', 1, 1, 1800, 0x0},
+				{0x0000, "Occupancy", 					 t_MAP8,	0x00, 0xff, "rr", 1, "\x00", 'm', 1, 1, 1800, 0x0},
 				{0x0001, "OccupancySensorType ", t_ENUM8, 0x00, 0xfe, "r", 	1, "\x00", 'M', 0, 0, 0, 0},
 			},
 			0, {
@@ -604,8 +604,8 @@ stZclCluster_t my_zcl_clusters[] = {
 		{
 			1,
 			8, {
-				{0x0000, "CurrentSummationDelivered",	t_UINT48, 0x0, -1,			"rr", 6,	"\x00\x00\x00\x00\x00\x00", 'm', 1, 1, 1800, 0x000000000001},
-				{0x0001, "CurrentSummationReceived",	t_UINT48, 0x0, -1,			"rr", 6,	"\x00\x00\x00\x00\x00\x00", 'm', 1, 1, 1800, 0x000000000001},
+				{0x0000, "CurrentSummationDelivered",	t_UINT48, 0x0, -1,			"rr", 6,	"\x00\x00\x00\x00\x00\x00", 'm', 1, 1, 1800, 0x01},
+				{0x0001, "CurrentSummationReceived",	t_UINT48, 0x0, -1,			"rr", 6,	"\x00\x00\x00\x00\x00\x00", 'm', 1, 1, 1800, 0x01},
 				{0x0200, "Status",										t_MAP8,		0x0, 0xff,		"r",  1,	"\x00", 'M', 0, 0, 0, 0},
 				{0x0300, "UnitofMeasure",							t_ENUM8,	0x0, 0xff,		"r",  1,	"\x00", 'M', 0, 0, 0, 0},
 				{0x0301, "Multiplier",								t_UINT24, 0x0, 0xffffff,"r",  3,	"\x00\x00\x00", 'O', 0, 0, 0, 0},
@@ -857,13 +857,33 @@ int z3_register(char *addr, int *epList, int epListLen, char *ModelStr, char *mo
 	char buf[256];
 	int i = 0;
 	int len = 0;
+	char *mac = NULL;
 	for (i = 0; i < epListLen; i++) {
 		len += sprintf(buf + len, "%s%d", (i == 0) ? "" : ",", epList[i]);
 	}
 
 	char str[32];
-	log_info("%s,epList:%s, ModelStr:%s, model:%s, type:%d, battery:%d", 
-		mac2str(addr, str), buf, ModelStr, model, type, battery);
+	log_info("%s,epList:%s, ModelStr:%s, model:%s, type:%d, battery:%d",
+           mac2str(addr, str), buf, ModelStr, model, type, battery);
+
+  mac = malloc(sizeof(char) * 8);
+  memcpy(mac, addr, 8);
+
+  stZigbeeDevice_t *zd = zigbee_search_by_extaddr_ext(mac);
+  if (zd != NULL) {
+    stZigbeeSimplerDesc_t *sd = zigbee_simplerdesc_get(zd, zigbee_get_ep_value(zd,0));
+    if (sd != NULL) {
+      stZigbeeCluster_t *zc = zigbee_cluster_get(sd, 0, 0x0000);
+      if (zc != NULL) {
+        stZigbeeAttr_t *za  = zigbee_attr_get(zc, 0x0005);
+        if (za != NULL) {
+          char *buf = za->data;
+          strcpy(buf, "InD1");
+          za->last = 1621923198;
+        }
+      }
+    }
+  }
 
 	if (dmc && dmc->rpt_dev_added != NULL) {
 		dmc->rpt_dev_added(addr, ModelStr, model, type, battery, epList, epListLen);
@@ -922,7 +942,7 @@ int z3_cmd(char *addr, unsigned char ep, unsigned short clsid, const char *buf, 
 int z3_zcl_cmd_ret(char *addr, unsigned char ep, unsigned short clsid, char cmdid, int status, int linkQuality, void *context, unsigned char seq) {
 	char str[32];
 	log_info("%s, ep:%02X, cluster:%02X, linkQuality:%02X, status:%d, seq:%02X", mac2str(addr, str), ep&0xff, clsid&0xffff, linkQuality&0xff, status, seq&0xff);
-	
+
 	if (dmc && dmc->rpt_zcl_cmd_status != NULL) {
 		dmc->rpt_zcl_cmd_status(addr, ep&0xff, clsid&0xffff, cmdid&0xff, status, linkQuality, context, seq);
 	}
@@ -1050,7 +1070,7 @@ int rbsdk_add_dev(char *mac, char *type) {
 }
 
 int rbsdk_del_dev(char *mac) {
-	return z3_remove_a(mac, 2);
+	return z3_remove_a(mac, 1);
 }
 
 int rbsdk_zcl_cmd(char *mac, int manufacturer, int ep, int cluster, int cmdid,	char *data, int len, void *context) {
