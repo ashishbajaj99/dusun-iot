@@ -867,19 +867,44 @@ int z3_register(char *addr, int *epList, int epListLen, char *ModelStr, char *mo
            mac2str(addr, str), buf, ModelStr, model, type, battery);
 
   mac = malloc(sizeof(char) * 8);
+  memset(mac, 0, 8);
   memcpy(mac, addr, 8);
+
+	log_info("mac: %s", mac2str(addr, str));
 
   stZigbeeDevice_t *zd = zigbee_search_by_extaddr_ext(mac);
   if (zd != NULL) {
-    stZigbeeSimplerDesc_t *sd = zigbee_simplerdesc_get(zd, zigbee_get_ep_value(zd,0));
-    if (sd != NULL) {
-      stZigbeeCluster_t *zc = zigbee_cluster_get(sd, 0, 0x0000);
-      if (zc != NULL) {
-        stZigbeeAttr_t *za  = zigbee_attr_get(zc, 0x0005);
-        if (za != NULL) {
-          char *buf = za->data;
-          strcpy(buf, "InD1");
-          za->last = 1621923198;
+    log_info("Got device info %s", mac2str((char *)zd->extaddr, str));
+
+    for  (i = 0; i < epListLen; i++) {
+      stZigbeeSimplerDesc_t *sd = zigbee_simplerdesc_get(zd, zigbee_get_ep_value(zd, i));
+      if (sd != NULL) {
+      log_info("Got simple desc info for endpoint %02X", sd->ep);
+        stZigbeeCluster_t *zc = zigbee_cluster_get(sd, 0, 0x0000);
+        if (zc != NULL) {
+          log_info("Got cluster info for clusterId %04X", zc->clsid);
+          stZigbeeAttr_t *za  = zigbee_attr_get(zc, 0x0005);
+          if (za != NULL) {
+            log_info("Got attrib info for attribId %04X", za->attrid);
+            char *buf = za->data;
+
+            if (NULL != buf) {
+              log_info("ModelId Attr: %s", buf);
+
+              if (0 == strlen(buf)) {
+                buf = malloc(5);
+                strcpy(buf, "InD1");
+                log_info("ModelId Attr: %s", buf);
+              }
+              za->last = 1621923198;
+            } else {
+              buf = malloc(5);
+              memset(buf, 0, 5);
+              strcpy(buf, "InD1");
+              log_info("ModelId Attr: %s", buf);
+              za->last = 1621923198;
+            }
+          }
         }
       }
     }
